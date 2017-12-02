@@ -56,7 +56,7 @@ int main(int argc, const char * argv[]) {
 }
 
 void childProc(SEMAPHORE & sem, int execute) {
-    int x = u;
+    int x = 827395609;
     bool resume = true;
     while(true) {
         sem.P(execute);
@@ -84,7 +84,7 @@ void childProc(SEMAPHORE & sem, int execute) {
 /**
 
 */
-void quit(SEMAPHORE & sem, pid_t children) {
+void quit(SEMAPHORE & sem, pid_t children []) {
     // Goes through all children and kills them.
     for(pid_t pid : children) {
         cout << "Killing: " << pid << endl;
