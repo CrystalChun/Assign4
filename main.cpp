@@ -30,15 +30,23 @@ int main(int argc, const char * argv[]) {
             cout << "In child " << getpid() << endl;
             // Child, loop in here and never break out
             int x = u;
+            bool resume = true;
             while(true) {
                 sem.P(max);
-                cout << getpid() << " running" << endl;
+                if(resume) {
+                    cout << getpid() << " running" << endl;
+                    resume = false;
+                }
+                // 
                 int randNum = rand(); // Generate random numbers
                 // Test if number less than 100 or divisible by X
                 if(randNum < 100 || randNum % x == 0) {
                     // Break out and queue itself
                     cout << getpid() << " Leaving, " << randNum << endl;
                     sem.V(max);
+                    if(!resume) {
+                        resume = true;
+                    }
                 }
             }
         } else {
