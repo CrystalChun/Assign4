@@ -13,14 +13,14 @@ Problems:
 1. How do we determine which integer the child will work on?
 2. How do we spawn more than one child at a time?
 3. Queueing the children and activating the next one?
-4. Listen for !wq input and terminating everything?
 */
 int main(int argc, const char * argv[]) {
     const int u = 827395609;
     const int v = 962094883;
     int children = 0;
-    int max = 2;
+    int max = 0;
     SEMAPHORE sem(1);
+    sem.V(max);
     pid_t childrenPid[4];
     pid_t pid;
     // Spawn 4 children, only two at a time and cannot work on same int
@@ -50,10 +50,10 @@ int main(int argc, const char * argv[]) {
                 }
             }
         } else {
-            // Parent - listens for !wq, when it gets it, abort all children
-            children ++;
             cout << "Recording child # " << children << " pid: " << pid << endl;
             childrenPid[children] = pid;
+            // Parent - listens for !wq, when it gets it, abort all children
+            children ++;
         }
     }
     cout << getpid() << " Parent finished making children" << endl;
