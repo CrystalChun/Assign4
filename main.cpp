@@ -9,7 +9,7 @@
 using namespace std;
 
 void childProc(SEMAPHORE &, int);
-void quit(SEMAPHORE &, pid_t []);
+void quit(SEMAPHORE &, pid_t (&children)[]);
 /*
 Problems:
 1. Determining whether to work on u or v. Idea: shared memory, put in whichever is available. 
@@ -84,7 +84,7 @@ void childProc(SEMAPHORE & sem, int execute) {
 /**
 
 */
-void quit(SEMAPHORE & sem, pid_t children []) {
+void quit(SEMAPHORE & sem, pid_t (&children) []) {
     // Goes through all children and kills them.
     for(pid_t pid : children) {
         cout << "Killing: " << pid << endl;
