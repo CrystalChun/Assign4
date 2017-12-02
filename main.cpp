@@ -21,6 +21,7 @@ int main(int argc, const char * argv[]) {
     int max = 0;
     SEMAPHORE sem(1);
     sem.V(max);
+    sem.V(max);
     pid_t childrenPid[4];
     pid_t pid;
     // Spawn 4 children, only two at a time and cannot work on same int
@@ -31,23 +32,23 @@ int main(int argc, const char * argv[]) {
             // Child, loop in here and never break out
             int x = u;
             bool resume = true;
-            cout << max << endl;
             while(true) {
                 sem.P(max);
-                cout << max << endl;
                 if(resume) {
                     cout << getpid() << " running" << endl;
                     resume = false;
                 }
-                // 
-                int randNum = rand(); // Generate random numbers
-                // Test if number less than 100 or divisible by X
-                if(randNum < 100 || randNum % x == 0) {
-                    // Break out and queue itself
-                    cout << getpid() << " Leaving, " << randNum << endl;
-                    sem.V(max);
-                    if(!resume) {
-                        resume = true;
+                while(true) {
+                    int randNum = rand(); // Generate random numbers
+                    // Test if number less than 100 or divisible by X
+                    if(randNum < 100 || randNum % x == 0) {
+                        // Break out and queue itself
+                        cout << getpid() << " Leaving, " << randNum << endl;
+                        sem.V(max);
+                        if(!resume) {
+                            resume = true;
+                        }
+                        break;
                     }
                 }
             }
