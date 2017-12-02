@@ -31,6 +31,7 @@ int main(int argc, const char * argv[]) {
             // Child, loop in here and never break out
             int x = u;
             bool resume = true;
+            cout << max << endl;
             while(true) {
                 sem.P(max);
                 if(resume) {
