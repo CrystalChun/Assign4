@@ -26,14 +26,13 @@ int main(int argc, const char * argv[]) {
     // Spawn 4 children, only two at a time and cannot work on same int
     
     while(children < 4) { // Spawns only 4 children... hopefully
-    cout << "Number of children so far: " << children << endl;
         if((pid = fork()) == 0) {
             cout << "In child " << getpid() << endl;
             // Child, loop in here and never break out
             int x = u;
             while(true) {
-                
                 sem.P(max);
+                cout << getpid() << " running" << endl;
                 int randNum = rand(); // Generate random numbers
                 // Test if number less than 100 or divisible by X
                 if(randNum < 100 || randNum % x == 0) {
@@ -45,6 +44,7 @@ int main(int argc, const char * argv[]) {
         } else {
             // Parent - listens for !wq, when it gets it, abort all children
             children ++;
+            cout << "Recording child # " << children << " pid: " << pid << endl;
             childrenPid[children] = pid;
         }
     }
@@ -58,9 +58,11 @@ int main(int argc, const char * argv[]) {
         }
         // Got !wq and aborts children
         for(pid_t pid : childrenPid) {
+            cout << "Killing: " << pid << endl;
             kill(pid, SIGTERM);
         }
         break;
     }
-    
+    cout << "Killed all children, parent leaving" << endl;
+    sem.remove();
 }
