@@ -86,7 +86,7 @@ void childProc(SEMAPHORE & sem, int execute) {
 */
 void quit(SEMAPHORE & sem, pid_t children[]) {
     // Goes through all children and kills them.
-    for(int i = 0; i < sizeof(children); i++) {
+    for(int i = 0; i < sizeof(*children); i++) {
         cout << "Killing: " << children[i] << endl;
         kill(children[i], SIGTERM);
     }
