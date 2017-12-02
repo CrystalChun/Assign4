@@ -34,6 +34,7 @@ int main(int argc, const char * argv[]) {
             cout << max << endl;
             while(true) {
                 sem.P(max);
+                cout << max << endl;
                 if(resume) {
                     cout << getpid() << " running" << endl;
                     resume = false;
