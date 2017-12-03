@@ -45,7 +45,7 @@ int main(int argc, const char * argv[]) {
         if((pid = fork()) == 0) {
             cout << "In child " << getpid() << endl;
             // Child, loop in here and never break out
-            childProc(sem, execute);
+            childProc(sem, execute, u);
         } else {
             cout << "Recording child # " << children << " pid: " << pid << endl;
             childrenPid[children] = pid;
