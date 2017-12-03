@@ -37,7 +37,7 @@ int main(int argc, const char * argv[]) {
     
     *(shmBUF + 0) = u;
     *(shmBUF + 1) = v;
-    cout << "u: " << *(shmBUF + 0) << endl << "v: " << *(shmBuf + 0) << endl;
+    cout << "u: " << *(shmBUF + 0) << endl << "v: " << *(shmBUF + 0) << endl;
     // Spawn 4 children, only two at a time and cannot work on same int
     
     while(children < 4) { // Spawns only 4 children... hopefully
