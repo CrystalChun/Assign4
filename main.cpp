@@ -36,8 +36,8 @@ int main(int argc, const char * argv[]) {
     sem.V(execute);
     sem.V(execute);
     
-    *(shmBUF + 0) = '0';
-    *(shmBUF + 1) = '0';
+    *(shmBUF + 0) = '1';
+    *(shmBUF + 1) = '1';
     cout << "u: " << *(shmBUF + 0) << endl << "v: " << *(shmBUF + 1) << endl;
     // Spawn 4 children, only two at a time and cannot work on same int
     
