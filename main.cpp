@@ -84,13 +84,13 @@ void childProc(SEMAPHORE & sem, char * shmbuf) {
         if(*(shmbuf + 0) == '1') {
             // Using u
             modNum = 827395609;
-            *(shmbuf + 0) == '0';
+            *(shmbuf + 0) = '0';
             index = 0;
             cout << "Using u "<<*(shmbuf + 0) << endl;
         } else if (*(shmbuf + 1) == '1') {
             // Using v
             modNum = 962094883;
-            *(shmbuf + 1) == '0';
+            *(shmbuf + 1) = '0';
             index = 1;
             cout << "Using v"<<*(shmbuf + 1) << endl;
         }
