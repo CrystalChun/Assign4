@@ -11,8 +11,8 @@
 #include <string>
 #include "semaphore.h"
 using namespace std;
-
-void childProc(SEMAPHORE &, int, char*);
+enum {EXE, BUF};
+void childProc(SEMAPHORE &, char*);
 void quit(SEMAPHORE &, pid_t []);
 /*
 Problems:
@@ -27,16 +27,17 @@ int main(int argc, const char * argv[]) {
     int execute = 0;
     pid_t pid;
     pid_t childrenPid[4];
-    SEMAPHORE sem(1);
+    SEMAPHORE sem(2);
 
-    enum {EXE, BUF};
+    
     cout << "EXE: " << EXE << endl << "BUF: " << BUF << endl;
     // IPC_PRIVATE is replacement for ftok
 	int shmid = shmget(IPC_PRIVATE, BUFFSIZE * sizeof(char), PERMS); // allocated shared memory (not attached yet)
 	char * shmBUF = (char *)shmat(shmid, 0, SHM_RND); // attaching to that shared memory - pointer that points to shared memor
 
-    sem.V(execute);
-    sem.V(execute);
+    sem.V(EXE);
+    sem.V(EXE);
+    sem.V(BUF);
     
     *(shmBUF + 0) = '1';
     *(shmBUF + 1) = '1';
@@ -47,7 +48,7 @@ int main(int argc, const char * argv[]) {
         if((pid = fork()) == 0) {
             cout << "In child " << getpid() << endl;
             // Child, loop in here and never break out
-            childProc(sem, execute, shmBUF);
+            childProc(sem, shmBUF);
         } else {
             cout << "Recording child # " << children << " pid: " << pid << endl;
             childrenPid[children] = pid;
@@ -70,12 +71,13 @@ int main(int argc, const char * argv[]) {
     quit(sem, childrenPid);
 }
 
-void childProc(SEMAPHORE & sem, int execute, char * shmbuf) {
+void childProc(SEMAPHORE & sem, char * shmbuf) {
     bool resume = true;
     int index = 0;
     while(true) {
         int modNum = 1;
-        sem.P(execute);
+        sem.P(EXE);
+        sem.P(BUF);
         if(*(shmbuf + 0) == '1') {
             // Using u
             modNum = 827395609;
@@ -87,6 +89,7 @@ void childProc(SEMAPHORE & sem, int execute, char * shmbuf) {
             *(shmbuf + 1) == '0';
             index = 1;
         }
+        sem.V(BUF);
 
         if(resume) {
             cout << "NEW CHILD: " << getpid() << " running, using: " << modNum << endl;
@@ -98,7 +101,9 @@ void childProc(SEMAPHORE & sem, int execute, char * shmbuf) {
             if(randNum < 100 || randNum % modNum == 0) {
                 // Break out and queue itself
                 cout << getpid() << " Leaving: " << randNum << " index: " << index<< endl;
+                sem.P(BUF);
                 *(shmbuf + index) = '1';
+                sem.V(BUF);
                 sem.V(execute);
                 if(!resume) {
                     resume = true;
