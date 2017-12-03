@@ -87,7 +87,7 @@ void childProc(SEMAPHORE & sem, int execute, char * shmbuf) {
         }
 
         if(resume) {
-            cout << "NEW CHILD: " getpid() << " running, using: " << modNum << endl;
+            cout << "NEW CHILD: " << getpid() << " running, using: " << modNum << endl;
             resume = false;
         }
         while(true) {
