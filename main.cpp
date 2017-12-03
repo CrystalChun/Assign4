@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
 #include <unistd.h>
 #include <iostream>
 #include <string>
@@ -15,6 +19,7 @@ Problems:
 1. Determining whether to work on u or v. Idea: shared memory, put in whichever is available. 
 */
 int main(int argc, const char * argv[]) {
+    const int BUFFSIZE = 2;
     const int u = 827395609;
     const int v = 962094883;
     int children = 0;
@@ -23,9 +28,16 @@ int main(int argc, const char * argv[]) {
     pid_t childrenPid[4];
     SEMAPHORE sem(1);
 
+    // IPC_PRIVATE is replacement for ftok
+	int shmid = shmget(IPC_PRIVATE, BUFFSIZE * sizeof(int), PERMS); // allocated shared memory (not attached yet)
+	int * shmBUF = (int *)shmat(shmid, 0, SHM_RND); // attaching to that shared memory - pointer that points to shared memor
+
     sem.V(execute);
     sem.V(execute);
     
+    *(shmBUF + 0) = u;
+    *(shmBUF + 1) = v;
+    cout << "u: " << *(shmBUF + 0) << endl << "v: " << *(shmBuf + 0) << endl;
     // Spawn 4 children, only two at a time and cannot work on same int
     
     while(children < 4) { // Spawns only 4 children... hopefully
