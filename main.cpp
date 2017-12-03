@@ -35,9 +35,11 @@ int main(int argc, const char * argv[]) {
 	int shmid = shmget(IPC_PRIVATE, BUFFSIZE * sizeof(char), PERMS); // allocated shared memory (not attached yet)
 	char * shmBUF = (char *)shmat(shmid, 0, SHM_RND); // attaching to that shared memory - pointer that points to shared memor
 
+    cout << "Setting up semaphores" << endl;
     sem.V(EXE);
     sem.V(EXE);
-
+    sem.V(BUF);
+    cout << "Done setting up " << endl;
     *(shmBUF + 0) = '1';
     *(shmBUF + 1) = '1';
     cout << "u: " << *(shmBUF + 0) << endl << "v: " << *(shmBUF + 1) << endl;
