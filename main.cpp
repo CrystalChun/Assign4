@@ -82,14 +82,16 @@ void childProc(SEMAPHORE & sem, char * shmbuf) {
             modNum = 827395609;
             *(shmbuf + 0) == '0';
             index = 0;
+            cout << "Using u" << endl;
         } else if (*(shmbuf + 1) == '1') {
             // Using v
             modNum = 962094883;
             *(shmbuf + 1) == '0';
             index = 1;
+            cout << "Using v" << endl;
         }
         sem.V(BUF);
-
+        cout << "Releasing buf semaphore" << endl;
         if(resume) {
             cout << "NEW CHILD: " << getpid() << " running, using: " << modNum << endl;
             resume = false;
