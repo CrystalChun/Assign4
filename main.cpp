@@ -29,20 +29,26 @@ int main(int argc, const char * argv[]) {
     SEMAPHORE sem(1);
 
     // IPC_PRIVATE is replacement for ftok
-	int shmid = shmget(IPC_PRIVATE, BUFFSIZE * sizeof(int), PERMS); // allocated shared memory (not attached yet)
-	int * shmBUF = (int *)shmat(shmid, 0, SHM_RND); // attaching to that shared memory - pointer that points to shared memor
+	int shmid = shmget(IPC_PRIVATE, BUFFSIZE * sizeof(char), PERMS); // allocated shared memory (not attached yet)
+	char * shmBUF = (char *)shmat(shmid, 0, SHM_RND); // attaching to that shared memory - pointer that points to shared memor
 
     sem.V(execute);
     sem.V(execute);
     
-    *(shmBUF + 0) = u;
-    *(shmBUF + 1) = v;
-    cout << "u: " << *(shmBUF + 0) << endl << "v: " << *(shmBUF + 0) << endl;
+    *(shmBUF + 0) = 1;
+    *(shmBUF + 1) = 1;
+    cout << "u: " << *(shmBUF + 0) << endl << "v: " << *(shmBUF + 1) << endl;
     // Spawn 4 children, only two at a time and cannot work on same int
     
     while(children < 4) { // Spawns only 4 children... hopefully
         if((pid = fork()) == 0) {
             cout << "In child " << getpid() << endl;
+            // Determine number here
+            if(*(shmBUF + 0) != 0){
+
+            } else {
+
+            }
             // Child, loop in here and never break out
             childProc(sem, execute);
         } else {
