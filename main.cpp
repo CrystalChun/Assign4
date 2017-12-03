@@ -12,7 +12,7 @@
 #include "semaphore.h"
 using namespace std;
 
-void childProc(SEMAPHORE &, int, int);
+void childProc(SEMAPHORE &, int, char*);
 void quit(SEMAPHORE &, pid_t []);
 /*
 Problems:
@@ -45,7 +45,7 @@ int main(int argc, const char * argv[]) {
         if((pid = fork()) == 0) {
             cout << "In child " << getpid() << endl;
             // Child, loop in here and never break out
-            childProc(sem, execute, u);
+            childProc(sem, execute, shmBUF);
         } else {
             cout << "Recording child # " << children << " pid: " << pid << endl;
             childrenPid[children] = pid;
