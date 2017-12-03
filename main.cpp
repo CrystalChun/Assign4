@@ -68,10 +68,23 @@ int main(int argc, const char * argv[]) {
     quit(sem, childrenPid);
 }
 
-void childProc(SEMAPHORE & sem, int execute, int modNum) {
+void childProc(SEMAPHORE & sem, int execute, char * shmbuf) {
     bool resume = true;
+    int index = 0;
     while(true) {
+        int modNum = 1;
         sem.P(execute);
+        if(*(shmbuf + 0) == '1') {
+            // Using u
+            modNum = 827395609;
+            *(shmbuf + 0) == '0';
+            index = 0;
+        } else if (*(shmbuf + 1) == '1') {
+            // Using v
+            modNum = 962094883;
+            *(shmbuf + 1) == '0';
+            index = 1;
+        }
 
         if(resume) {
             cout << getpid() << " running" << endl;
@@ -83,11 +96,11 @@ void childProc(SEMAPHORE & sem, int execute, int modNum) {
             if(randNum < 100 || randNum % modNum == 0) {
                 // Break out and queue itself
                 cout << getpid() << " Leaving, " << randNum << endl;
+                *(shmbuf + index) = '1';
                 sem.V(execute);
                 if(!resume) {
                     resume = true;
                 }
-                
                 break;
             }
         }
