@@ -13,7 +13,7 @@
 using namespace std;
 enum {EXE, BUF};
 void childProc(SEMAPHORE &, char*);
-void quit(SEMAPHORE &, pid_t []);
+void quit(SEMAPHORE &, pid_t [], int);
 /*
 Problems:
 1. Determining whether to work on u or v. Idea: shared memory, put in whichever is available. 
@@ -69,7 +69,7 @@ int main(int argc, const char * argv[]) {
     }
 
     // Got !wq and aborts children
-    quit(sem, childrenPid);
+    quit(sem, childrenPid, shmid);
 }
 
 void childProc(SEMAPHORE & sem, char * shmbuf) {
@@ -121,13 +121,13 @@ void childProc(SEMAPHORE & sem, char * shmbuf) {
 /**
 
 */
-void quit(SEMAPHORE & sem, pid_t children[]) {
+void quit(SEMAPHORE & sem, pid_t children[], int shmid) {
     // Goes through all children and kills them.
     for(int i = 0; i < sizeof(*children); i++) {
         cout << "Killing: " << children[i] << endl;
         kill(children[i], SIGTERM);
     }
-
+    shmctl(shmid, IPC_RMID, NULL);	/* cleaning up */
     cout << "Killed all children, parent leaving" << endl;
 
     // Removes semaphore
