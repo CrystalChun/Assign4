@@ -37,8 +37,7 @@ int main(int argc, const char * argv[]) {
 
     sem.V(EXE);
     sem.V(EXE);
-    sem.V(BUF);
-    
+
     *(shmBUF + 0) = '1';
     *(shmBUF + 1) = '1';
     cout << "u: " << *(shmBUF + 0) << endl << "v: " << *(shmBUF + 1) << endl;
