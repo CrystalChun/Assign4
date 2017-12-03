@@ -73,6 +73,7 @@ int main(int argc, const char * argv[]) {
 void childProc(SEMAPHORE & sem, char * shmbuf) {
     bool resume = true;
     int index = 0;
+    cout << "EXE: " << EXE << endl << "BUF: " << BUF << endl;
     while(true) {
         int modNum = 1;
         sem.P(EXE);
