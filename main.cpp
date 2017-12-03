@@ -103,7 +103,7 @@ void childProc(SEMAPHORE & sem, char * shmbuf) {
                 sem.P(BUF);
                 *(shmbuf + index) = '1';
                 sem.V(BUF);
-                sem.V(execute);
+                sem.V(EXE);
                 if(!resume) {
                     resume = true;
                 }
