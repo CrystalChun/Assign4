@@ -95,7 +95,7 @@ void childProc(SEMAPHORE & sem, int execute, char * shmbuf) {
             // Test if number less than 100 or divisible by X
             if(randNum < 100 || randNum % modNum == 0) {
                 // Break out and queue itself
-                cout << getpid() << " Leaving, " << randNum << endl;
+                cout << getpid() << " Leaving: " << randNum << " index: " << index << endl;
                 *(shmbuf + index) = '1';
                 sem.V(execute);
                 if(!resume) {
