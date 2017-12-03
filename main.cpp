@@ -76,7 +76,9 @@ void childProc(SEMAPHORE & sem, char * shmbuf) {
     while(true) {
         int modNum = 1;
         sem.P(EXE);
+        cout << "At least executing . . ." << endl;
         sem.P(BUF);
+        cout << "At least choosing something . . . " << endl;
         if(*(shmbuf + 0) == '1') {
             // Using u
             modNum = 827395609;
