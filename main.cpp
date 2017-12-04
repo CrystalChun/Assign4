@@ -23,16 +23,16 @@ int main(int argc, const char * argv[]) {
     pid_t pid;
     pid_t childrenPid[4];
 
-    // Initialize shared memory
-	int shmid = shmget(IPC_PRIVATE, BUFFSIZE * sizeof(char), PERMS); // allocated shared memory
-	char * shmBUF = (char *)shmat(shmid, 0, SHM_RND); // attaching shared memory
-
     // Initialize semaphores
     SEMAPHORE sem(2);
     
     sem.V(EXE); 
     sem.V(EXE); // EXE = 2
     sem.V(BUF); // BUF = 1
+
+    // Initialize shared memory
+	int shmid = shmget(IPC_PRIVATE, BUFFSIZE * sizeof(char), PERMS); // allocated shared memory
+	char * shmBUF = (char *)shmat(shmid, 0, SHM_RND); // attaching shared memory
 
     // Setup flags in shared memory, 1 = available, 0 = not available
     *(shmBUF + 0) = '1'; // Flag that u is available
@@ -42,9 +42,8 @@ int main(int argc, const char * argv[]) {
     while(children < 4) { 
         if((pid = fork()) == 0) { // In child
             cout << "In child " << getpid() << endl;
-            // Child process
             childProc(sem, shmBUF);
-        } else {
+        } else { // In parent
             cout << "Recording child # " << children << " pid: " << pid << endl;
             // Adding child's process ID into list
             childrenPid[children] = pid;
@@ -52,7 +51,6 @@ int main(int argc, const char * argv[]) {
         }
     }
     cout << getpid() << " Parent finished making children" << endl;
-
 
     string endSignal;
 
