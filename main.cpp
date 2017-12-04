@@ -12,6 +12,7 @@
 #include "semaphore.h"
 using namespace std;
 enum {EXE, BUF}; // Semaphore ids, EXE is for executing a child process, BUF is for entering the critical area (aka shared memory)
+int getModNum(char * );
 void childProc(SEMAPHORE &, char*);
 void quit(SEMAPHORE &, pid_t [], int);
 
