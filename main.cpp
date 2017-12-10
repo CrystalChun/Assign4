@@ -143,6 +143,7 @@ void childProc(SEMAPHORE & sem, char * shmbuf) {
         modNum = index == 0 ? 827395609 : 962094883;
         
         cout << "Child PID: " << getpid() << " using: " << modNum << endl;
+
         // Generates random numbers until number is less than 100 or divisible by its modNum
         while(true) {
             int randNum = rand(); // Generate random numbers
@@ -150,7 +151,8 @@ void childProc(SEMAPHORE & sem, char * shmbuf) {
             // Test if number less than 100 or divisible by modNum
             if(randNum < 100 || randNum % modNum == 0) {
                 // If it is, queue itself and allow next child to execute
-    
+                cout << "Child PID: " << getpid() << " leaving, releasing: " << modNum << endl;
+                
                 // Update flag in critical area to allow next process to use this modNum
                 sem.P(BUF);
                 *(shmbuf + index) = '1';
