@@ -136,12 +136,13 @@ void childProc(SEMAPHORE & sem, char * shmbuf) {
         sem.P(BUF); 
         index = getModNum(shmbuf);
         sem.V(BUF);
-
+        
         srand((unsigned)time(0));
 
         // Determines the mod number. Index = 0, use u (827395609), else use v (962094883).
         modNum = index == 0 ? 827395609 : 962094883;
         
+        cout << "Child PID: " << getpid() << " using: " << modNum << endl;
         // Generates random numbers until number is less than 100 or divisible by its modNum
         while(true) {
             int randNum = rand(); // Generate random numbers
